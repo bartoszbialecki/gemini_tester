@@ -22,7 +22,8 @@ ${PASSWORD_INPUT}                   id:st_form-user-password
 ${LOGIN_BUTTON}                     css=.act_button.login
 
 ${LOGGED_IN_USER_EMAIL}             css=.user_mail
-${LOGOUT_LINK}                      //a[contains(text(), 'Wyloguj się')]
+${ACCOUNT_DIALOG}                   css=.login
+${LOGOUT_LINK}                      //div[@class='reg']/a[@href="https://www.aptekagemini.pl/user/logoutUser"]
 ${LOGIN_ERROR_TOOLTIP}              //div[@class='error_tooltip']/img
 ${LOGIN_ERROR_TOOLTIP_TEXT}         data-tooltip
 ${EMPTY_EMAIL_TEXT}                 Brak adresu email.
@@ -50,20 +51,22 @@ Close Cookies Info Dialog
     Click Element                   ${COOKIES_DIALOG_OK_BUTTON}
 
 Input Username
- 	[Arguments]	${username}
- 	Input Text	${USERNAME_INPUT}	${username}
+ 	[Arguments]	    ${username}
+ 	Input Text	    ${USERNAME_INPUT}	${username}
 
 Input Password
- 	[Arguments]	${password}
- 	Input Text	${PASSWORD_INPUT}	${password}	
+ 	[Arguments]	    ${password}
+ 	Input Text	    ${PASSWORD_INPUT}	${password}	
 
 Submit Credentials
  	Click Element   ${LOGIN_BUTTON}
 
 Logout User
-    Click Element   css=.login
+    #Click Element   css=.login
     #Click Element   ${LOGOUT_LINK}
-    Click Link      xpath=//a[@href="https://www.aptekagemini.pl/user/logoutUser"]
+    Mouse Over                      ${ACCOUNT_DIALOG}
+    Wait Until Element Is Visible   ${LOGOUT_LINK}
+    Click Element                   ${LOGOUT_LINK}
 
 # Close Privacy Policy Dialog If Appeared
 # 	${present}=	Run Keyword And Return Status	Page Should Contain	Cenimy Twoją prywatność
