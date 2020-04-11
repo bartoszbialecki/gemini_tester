@@ -1,0 +1,5 @@
+.DS_Store
+venv
+*.html
+selenium-screenshot*
+output.xml
