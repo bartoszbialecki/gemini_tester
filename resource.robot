@@ -2,6 +2,8 @@
 Documentation   This is a resource file with all reusable keywords and variables used by other test suites.
 
 Library		SeleniumLibrary
+Library     Collections
+Library     String
 
 *** Variables ***
 ${BROWSER}	                        Chrome
@@ -58,6 +60,12 @@ ${BASKET_DELETE_PRODUCTS}           /basket/clear
 
 ${MAIN_PAGE_PRODUCTS}               //div[contains(@class, 'product_scroller')]//div[contains(@class, 'item')]
 ${PRODUCT_ID}                       data-id
+
+${SEARCH_TEXT}                      kudzu
+${SEARCH_INPUT}                     st_search_search
+${SEARCH_PRODUCTS_LIST}             //div[@id='list']//div[contains(@class, 'item')]
+${PRICE_RANGES_INPUTS}              css:.ais-price-ranges--input
+${PRICE_RANGES_BUTTON}              css:.ais-price-ranges--button
 
 *** Keywords ***
 Open Browser To Page
@@ -133,17 +141,18 @@ Get List Of ${count} Products At ${products_locator}
         &{item}=                Create Dictionary
         ${item_id}=             Get Element Attribute       ${product}              ${PRODUCT_ID}
         Set To Dictionary       ${item}                     id=${item_id}
-        ${product_details}=     Get Child Webelements       ${product}
-        ${name}=                Execute Javascript          ARGUMENTS               ${product_details[2]}       JAVASCRIPT  return arguments[0].getElementsByTagName('a')[0].text.trim();
+        ${name}=                Execute Javascript          ARGUMENTS               ${product}       JAVASCRIPT  return arguments[0].querySelector('.name a').text.trim();
         Set To Dictionary       ${item}                     name=${name}
-        ${price_string}=        Execute Javascript          ARGUMENTS               ${product_details[3]}       JAVASCRIPT  return arguments[0].getElementsByTagName('span')[0].innerHTML;
+        ${link}=                Execute Javascript          ARGUMENTS               ${product}       JAVASCRIPT  return arguments[0].querySelector('.name a').href;
+        Set To Dictionary       ${item}                     link=${link}
+        ${price_string}=        Execute Javascript          ARGUMENTS               ${product}       JAVASCRIPT  return arguments[0].querySelector('.price span').innerHTML;
         ${price_string}=        Replace String              ${price_string}         ,   .
         ${price}=               Convert To Number           ${price_string}
         Set To Dictionary       ${item}                     price=${price}
-        ${basket_element}=      Execute Javascript          ARGUMENTS               ${product_details[4]}       JAVASCRIPT  return arguments[0].querySelector('.st_button-basket-submit-enabled');
+        ${basket_element}=      Execute Javascript          ARGUMENTS               ${product}       JAVASCRIPT  return arguments[0].querySelector('.st_button-basket-submit-enabled');
         Set To Dictionary       ${item}                     add_to_basket_element=${basket_element}
         Append To List          ${products_list}            ${item}
         ${index}=               Set Variable                ${index + 1}
-        Run Keyword If          '${index}' == '${count}'           Exit For Loop
+        Run Keyword If          '${index}' == '${count}'    Exit For Loop
     END
     [Return]                    ${products_list}

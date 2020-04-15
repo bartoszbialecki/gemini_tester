@@ -1,9 +1,6 @@
 *** Settings ***
 Documentation   This is a test suite to test adding products to the basket.
 
-Library         Collections
-Library         String
-
 Resource        resource.robot
 
 Test Setup     Open Browser To Page
