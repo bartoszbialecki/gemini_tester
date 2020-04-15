@@ -19,13 +19,6 @@ Valid Username And Password     [Template]          Login With Valid Credentials
                                 ${VALID_USERNAME}   ${VALID_PASSWORD}
 
 *** Keywords ***
-Enter Credentials
-    [Arguments]                         ${username}     ${password}
-    Input Username                      ${username}
-    Input User Password                 ${password}
-    Submit Credentials
-    Sleep   2
-    
 Login With Invalid Credentials Should Fail
     [Arguments]                         ${username}     ${password}     ${expected_error}
     Enter Credentials                   ${username}     ${password}
