@@ -10,7 +10,7 @@ Test Teardown  Close Browser
 Add 2 Products From Main Page
     Add 2 Products To Basket
     ${quantity}=        Get Text    ${BASKET_QUANTITY}
-    Should Be Equal     ${quantity}     2
+    Should Be Equal As Integers     ${quantity}     2
     
 Add 2 Same Products From Main Page
     Click Element Using Javascript By Xpath     ${ADD_TO_BASKET_BUTTON}
@@ -42,7 +42,7 @@ Add Correct Products To Basket
     ${total_amount_string}=     Replace String                  ${total_amount_string}      ,   .
     ${total_amount_string}=     Replace String Using Regexp     ${total_amount_string}      [^0-9.]     ${EMPTY}
     ${total_amount}=            Convert To Number               ${total_amount_string}
-    Should Be Equal             ${total_amount}                 ${expected_total_price}
+    Should Be Equal As Numbers  ${total_amount}                 ${expected_total_price}
     FOR     ${product}          IN          @{products_list}
         ${name}=                Get From Dictionary     ${product}      name
         Page Should Contain     ${name}
@@ -65,7 +65,7 @@ Payment Flow
         ${cell}=    Get Table Cell  ${BASKET_PRODUCTS_TABLE}   ${index}    4
         ${quantity}=    Evaluate    ${quantity}+${cell}
     END
-    Should Be Equal                 ${quantity}     ${3}
+    Should Be Equal As Integers     ${quantity}     ${3}
     Page Should Contain Element     ${BASKET_CONFIRM_BUTTON}
     Go To Basket First Step
     Delete All Basket Products
