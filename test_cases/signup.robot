@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   This is a test suite to test signup functionality on the page.
 
-Resource        resource.robot
+Resource        ../resources/resource.robot
 
 Suite Setup     Go To Sign Up Page
 Suite Teardown  Close Browser

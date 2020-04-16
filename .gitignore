@@ -4,3 +4,4 @@ venv
 selenium-screenshot*
 output.xml
 *.log
+results

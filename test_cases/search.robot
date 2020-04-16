@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   This is a test suite to test search functionality on the page.
 
-Resource        resource.robot
+Resource        ../resources/resource.robot
 
 Suite Setup     Open Browser To Page
 Suite Teardown  Close Browser

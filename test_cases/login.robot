@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   This is a test suite to test login functionality on the page.
 
-Resource        resource.robot
+Resource        ../resources/resource.robot
 
 Suite Setup     Open Browser To Login Page
 Suite Teardown  Close Browser

@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   This is a test suite to test adding products to the basket.
 
-Resource        resource.robot
+Resource        ../resources/resource.robot
 
 Test Setup     Open Browser To Page
 Test Teardown  Close Browser
