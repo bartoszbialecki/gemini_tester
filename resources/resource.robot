@@ -61,7 +61,7 @@ ${BASKET_DELETE_PRODUCTS}           /basket/clear
 ${MAIN_PAGE_PRODUCTS}               //div[contains(@class, 'product_scroller')]//div[contains(@class, 'item')]
 ${PRODUCT_ID}                       data-id
 
-${SEARCH_TEXT}                      kudzu
+${SEARCH_TEXT}                      Kudzu Root
 ${SEARCH_INPUT}                     st_search_search
 ${SEARCH_PRODUCTS_LIST}             //div[@id='list']//div[contains(@class, 'item')]
 ${PRICE_RANGES_INPUTS}              css:.ais-price-ranges--input

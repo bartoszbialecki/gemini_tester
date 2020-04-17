@@ -5,3 +5,5 @@ selenium-screenshot*
 output.xml
 *.log
 results
+Documentation*
+.vscode

@@ -24,7 +24,7 @@ Filter Found Products By Price
     ${max_price}=       Set Variable        ${25}
     ${inputs}=          Get WebElements     ${PRICE_RANGES_INPUTS}
     Input Text          ${inputs}[1]        ${max_price}
-    Click Button        ${PRICE_RANGES_BUTTON}
+    Click Element       ${PRICE_RANGES_BUTTON}
     Sleep   2
     ${products}=    Get List Of All Products At ${SEARCH_PRODUCTS_LIST}
     FOR     ${product}      IN      @{products}
