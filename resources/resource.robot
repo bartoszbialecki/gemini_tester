@@ -11,8 +11,8 @@ ${URL}		                        https://www.aptekagemini.pl/
 
 ${PAGE_TITLE}                       Apteka Internetowa – Apteka Gemini
 
-${VALID_USERNAME}	                tajiye2268@hubopss.com
-${VALID_PASSWORD}	                test1234
+${VALID_USERNAME}	                valid_username
+${VALID_PASSWORD}	                valid_password
 
 ${COOKIES_DIALOG}                   id:cookies-modal
 ${COOKIES_DIALOG_OK_BUTTON}         css:.cookies-close
