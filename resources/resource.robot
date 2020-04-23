@@ -68,91 +68,79 @@ ${PRICE_RANGES_INPUTS}              css:.ais-price-ranges--input
 ${PRICE_RANGES_BUTTON}              css:.ais-price-ranges--button
 
 *** Keywords ***
-Open Browser To Page
-    Open Browser	                ${URL}	${BROWSER}
- 	Title Should Be                 ${PAGE_TITLE}
-    Close Cookies Info Dialog
+Go to the main page
+    Open Browser  ${URL}  ${BROWSER}
+    Sleep  3
+ 	Title Should Be  ${PAGE_TITLE}
+    Close cookies info dialog
 
-Go To Login Page
-    Wait Until Element Is Visible   ${ACCOUNT_LINK}
-    Click Element                   ${ACCOUNT_LINK}
-    Wait Until Element Is Visible   ${LOGIN_LINK}
-    Click Element                   ${LOGIN_LINK}
+Go to the login page
+    Go to the main page
+    Wait Until Element Is Visible  ${ACCOUNT_LINK}
+    Click Element  ${ACCOUNT_LINK}
+    Wait Until Element Is Visible  ${LOGIN_LINK}
+    Click Element  ${LOGIN_LINK}
 
-Open Browser To Login Page
-    Open Browser To Page
-    Sleep                           5
-    Go To Login Page
+Close cookies info dialog
+    Wait Until Element Is Visible  ${COOKIES_DIALOG}
+    Click Element  ${COOKIES_DIALOG_OK_BUTTON}
+    Sleep  1
 
-Close Cookies Info Dialog
-    Wait Until Element Is Visible   ${COOKIES_DIALOG}
-    Click Element                   ${COOKIES_DIALOG_OK_BUTTON}
-    Sleep   1
+Input ${username} into email field in the login form
+ 	Input Text  ${USERNAME_INPUT}  ${username}
 
-Input Username
- 	[Arguments]	    ${username}
- 	Input Text	    ${USERNAME_INPUT}	${username}
+Input ${password} into password field in the login form
+ 	Input Password  ${PASSWORD_INPUT}  ${password}	
 
-Input User Password
- 	[Arguments]	    ${password}
- 	Input Password  ${PASSWORD_INPUT}	${password}	
+Submit user login credentials
+ 	Click Element  ${LOGIN_BUTTON}
 
-Submit Credentials
- 	Click Element   ${LOGIN_BUTTON}
+Enter user login credentials
+    [Arguments]  ${username}  ${password}
+    Input ${username} into email field in the login form
+    Input ${password} into password field in the login form
+    Submit user login credentials
+    Sleep  2
 
-Enter Credentials
-    [Arguments]                         ${username}     ${password}
-    Input Username                      ${username}
-    Input User Password                 ${password}
-    Submit Credentials
-    Sleep   2
+Logout user
+    Mouse Over  ${ACCOUNT_DIALOG}
+    Wait Until Element Is Visible  ${LOGOUT_LINK}
+    Click Element  ${LOGOUT_LINK}
+    Sleep  2
+    Page Should Contain  ${LOGOUT_TEXT}
 
-Logout User
-    Mouse Over                      ${ACCOUNT_DIALOG}
-    Wait Until Element Is Visible   ${LOGOUT_LINK}
-    Click Element                   ${LOGOUT_LINK}
-    Sleep   2
-    Page Should Contain             ${LOGOUT_TEXT}
+${message} should appear on the page
+    ${text}=  Run Keyword  ${message}
+    Page Should Contain  ${text}
 
+Click element on the page using javascript by xpath
+    [Arguments]  ${xpath}
+    Execute Javascript  document.evaluate("${xpath}", document.body, null, 9, null).singleNodeValue.click();
 
-Click Element Using Javascript By Xpath
-    [Arguments]             ${xpath}
-    Execute Javascript      document.evaluate("${xpath}", document.body, null, 9, null).singleNodeValue.click();
-
-Click Element Using Javascript By Id
-    [Arguments]             ${id}
-    Execute Javascript      document.getElementById('${id}').click();
-
-Get Child Webelements
-    [Arguments]     ${element}
-
-    ${children}     Call Method       
-    ...                ${element}    
-    ...                find_elements
-    ...                by=xpath       value=child::*
-
-    [Return]      ${children}
-
-Get List Of ${count} Products At ${products_locator}
-    @{products_list}=           Create List
-    ${products}=                Get WebElements             ${products_locator}
-    ${index}=                   Set Variable                ${0}
-    FOR         ${product}      IN      @{products}
-        &{item}=                Create Dictionary
-        ${item_id}=             Get Element Attribute       ${product}              ${PRODUCT_ID}
-        Set To Dictionary       ${item}                     id=${item_id}
-        ${name}=                Execute Javascript          ARGUMENTS               ${product}       JAVASCRIPT  return arguments[0].querySelector('.name a').text.trim();
-        Set To Dictionary       ${item}                     name=${name}
-        ${link}=                Execute Javascript          ARGUMENTS               ${product}       JAVASCRIPT  return arguments[0].querySelector('.name a').href;
-        Set To Dictionary       ${item}                     link=${link}
-        ${price_string}=        Execute Javascript          ARGUMENTS               ${product}       JAVASCRIPT  return arguments[0].querySelector('.price span').innerHTML;
-        ${price_string}=        Replace String              ${price_string}         ,   .
-        ${price}=               Convert To Number           ${price_string}
-        Set To Dictionary       ${item}                     price=${price}
-        ${basket_element}=      Execute Javascript          ARGUMENTS               ${product}       JAVASCRIPT  return arguments[0].querySelector('.st_button-basket-submit-enabled');
-        Set To Dictionary       ${item}                     add_to_basket_element=${basket_element}
-        Append To List          ${products_list}            ${item}
-        ${index}=               Set Variable                ${index + 1}
-        Run Keyword If          '${index}' == '${count}'    Exit For Loop
+Get list of ${count} products at ${products_locator}
+    @{products_list}=  Create List
+    ${products}=  Get WebElements  ${products_locator}
+    ${index}=  Set Variable  ${0}
+    FOR  ${product}  IN  @{products}
+        &{item}=  Create Dictionary
+        ${item_id}=  Get Element Attribute  ${product}  ${PRODUCT_ID}
+        Set To Dictionary  ${item}  id=${item_id}
+        ${name}=  Execute Javascript  ARGUMENTS  ${product}  JAVASCRIPT  return arguments[0].querySelector('.name a').text.trim();
+        Set To Dictionary  ${item}  name=${name}
+        ${link}=  Execute Javascript  ARGUMENTS  ${product}  JAVASCRIPT  return arguments[0].querySelector('.name a').href;
+        Set To Dictionary  ${item}  link=${link}
+        ${price_string}=  Execute Javascript  ARGUMENTS  ${product}  JAVASCRIPT  return arguments[0].querySelector('.price span').innerHTML;
+        ${price_string}=  Replace String  ${price_string}  ,  .
+        ${price}=  Convert To Number  ${price_string}
+        Set To Dictionary  ${item}  price=${price}
+        ${basket_element}=  Execute Javascript  ARGUMENTS  ${product}  JAVASCRIPT  return arguments[0].querySelector('.st_button-basket-submit-enabled');
+        Set To Dictionary  ${item}  add_to_basket_element=${basket_element}
+        Append To List  ${products_list}  ${item}
+        ${index}=  Set Variable  ${index + 1}
+        Run Keyword If  '${index}' == '${count}'  Exit For Loop
     END
-    [Return]                    ${products_list}
+    [Return]  ${products_list}
+
+Get ${attribute:[^ ]+} of ${product: dict}
+    ${value}=  Get From Dictionary  ${product}  ${attribute}
+    [Return]  ${value}
